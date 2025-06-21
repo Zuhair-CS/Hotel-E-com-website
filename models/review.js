@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const User = require("../models/user.js");
 const Schema = mongoose.Schema;
 
 const reviewSchema = new Schema({
@@ -11,6 +12,10 @@ const reviewSchema = new Schema({
     createdAt: {
         type: Date,
         default: Date.now,
+    },
+    createdBy:{
+        type: Schema.Types.ObjectId,
+        ref:"User",
     }
 })
 const Review = mongoose.model("Review", reviewSchema);
