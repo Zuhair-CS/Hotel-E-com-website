@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const initData = require("./data.js");
 const Listing = require("../models/listing.js");
+const User = require("../models/user.js");
 
 const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
 
@@ -17,12 +18,20 @@ async function main() {
 }
 
 const initDB = async () => {
-      await Listing.deleteMany({});
-      initData.data = initData.data.map((obj)=>({...obj, owner: "6851b61924439a5afe2bf081"}))
-      console.log("Database cleared");
-      await Listing.insertMany(initData.data);
-      console.log("Data was initialized successfully");
-    };
-  
-  initDB();
+  await Listing.deleteMany({});
+  await User.deleteMany({});
+
+  const user = new User({ username: "admin", email: "admin@example.com" });
+  const registeredUser = await User.register(user, "pass123"); // Register with passport-local-mongoose
+
+  // Assign real user ID to each listing
+  const listingsWithOwner = initData.data.map((obj) => ({
+    ...obj,
+    owner: registeredUser._id,
+  }));
+
+  await Listing.insertMany(listingsWithOwner);
+  console.log("Database seeded successfully");
+}; 
+initDB();
   
