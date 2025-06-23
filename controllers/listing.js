@@ -20,18 +20,12 @@ module.exports.showListing = async(req, res) => {
 };
 
 module.exports.createListing = async (req, res, next) => {
+    let url = req.file.path;
+    let filename = req.file.filename
     let { listing } = req.body;
-    if (!listing.image || listing.image.trim() === "") {
-        listing.image = undefined;
-    } else {
-        listing.image = {
-            filename: "userupload",
-            url: listing.image
-        };
-    }
-
     const newListing = new Listing(listing);
     newListing.owner = req.user._id;
+    newListing.image = {url, filename}
     await newListing.save();
     req.flash("success", "New listing created successfully!");
     res.redirect("/listings");
@@ -44,32 +38,28 @@ module.exports.renderEditForm = async(req, res) => {
         req.flash("error", "The listing you requested does not exist");
         res.redirect("/listings");
     }
-    res.render("listings/edit.ejs", {listing});
+    let originalImageUrl = listing.image.url;
+    originalImageUrl = originalImageUrl.replace("/upload", "/upload/h_200,w_250");
+    res.render("listings/edit.ejs", {listing, originalImageUrl});
 };
 
 module.exports.updateListing = async (req, res) => {
     const { id } = req.params;
-    const { title, description, price, location, country, image } = req.body.listing;
-
-    let imageObject;
-
-    if (image && image.trim() !== "") {
-        imageObject = {
-            url: image.trim(),
-            filename: "listingimage"
-        };
-    } else {
-        imageObject = undefined; // triggers schema default
-    }
-
-    await Listing.findByIdAndUpdate(id, {
+    const { title, price, description, location, country } = req.body.listing;
+    let listing = await Listing.findByIdAndUpdate(id, {
         title,
-        description,
         price,
+        description,
         location,
         country,
-        image: imageObject
     });
+    if(typeof req.file !== "undefined"){
+        let url = req.file.path;
+        let filename = req.file.filename;
+        listing.image = {url, filename};
+        await listing.save();
+    }
+
     req.flash("success", "Listing Updated");
     res.redirect(`/listings/${id}`);
 };

@@ -21,8 +21,8 @@ const initDB = async () => {
   await Listing.deleteMany({});
   await User.deleteMany({});
 
-  const user = new User({ username: "admin", email: "admin@example.com" });
-  const registeredUser = await User.register(user, "pass123"); // Register with passport-local-mongoose
+  const user = new User({ username: "listingAdmin", email: "admin@example.com" });
+  const registeredUser = await User.register(user, "zuhairm3"); // Register with passport-local-mongoose
 
   // Assign real user ID to each listing
   const listingsWithOwner = initData.data.map((obj) => ({
