@@ -1,4 +1,8 @@
-<% layout("/layouts/boilerplate.ejs") %>
+<% layout("/layouts/boilerplate") %>
+<script>
+    const mapToken = "<%= process.env.MAP_TOKEN %>";
+    const listing = <%- JSON.stringify(listing) %>;
+</script>
     <div class="row mt-3">
         <div class="col-8 offset-3">
             <h3 class = "offset-3"><%= listing.title %></h3>
@@ -27,8 +31,9 @@
     
 
     <div class="col-8 offset-3">
-        <hr>
+
         <% if (currUser) { %>
+        <hr>
         <h4>Leave a Review</h4>
         <form action="/listings/<%= listing._id %>/reviews" method = "POST" class="mb-3 needs-validation" novalidate>
             <div class = "mb-3 mt-3">
@@ -56,22 +61,33 @@
         </form>
             <% } %>
     <hr>
-    <h4>All reviews</h4>
+    <% if (listing.reviews.length > 0) { %>
+
     <div class="row">
-    <% for(review of listing.reviews) { %>
-        <div class="card col-5 ms-3 mb-3">
-            <div class="card-body">
-                <h4 class="card-title mt-1"><%= review.createdBy.username %></h4>
-                <p class="starability-result card-text" data-rating="<%= review.rating %>">
-                </p>
-                <p class="card-text"> <%= review.comment %></p>
-                
-                <br>
+        
+        <h4>All reviews</h4>
+        <% for(review of listing.reviews) { %>
+            <div class="card col-5 ms-3 mb-3">
+                <div class="card-body">
+                    <h4 class="card-title mt-1"><%= review.createdBy.username %></h4>
+                    <p class="starability-result card-text" data-rating="<%= review.rating %>">
+                    </p>
+                    <p class="card-text"> <%= review.comment %></p>
+                    
+                    <br>
+                </div>
+                <form action="/listings/<%= listing._id%>/reviews/<%= review._id%>?_method=DELETE" method = "POST" class="mb-3">
+                    <button class="btn btn-dark btn-sm">Delete</button>
+                </form>
             </div>
-            <form action="/listings/<%= listing._id%>/reviews/<%= review._id%>?_method=DELETE" method = "POST" class="mb-3">
-                <button class="btn btn-dark btn-sm">Delete</button>
-            </form>
-        </div>
-    <% } %>
+        <% } %>
     </div>
+         
+    <% } %>
 </div>
+    <div class="col-6 offset-3">
+        <h3>Where you'll be</h3>
+        <div id="map"></div>
+</div>
+<br>
+<script src="/js/map.js"></script>

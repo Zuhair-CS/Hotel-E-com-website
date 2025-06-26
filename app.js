@@ -16,7 +16,7 @@ const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
-
+const MONGO_URL = 'mongodb://127.0.0.1:27017/wanderlust'
 
 
 const sessionOptions = {
@@ -32,7 +32,7 @@ const sessionOptions = {
 
 
 async function main() {
-    await mongoose.connect('mongodb://127.0.0.1:27017/wanderlust');
+    await mongoose.connect( MONGO_URL);
 }
 main().then((res)=>{
     console.log("connection successful");
