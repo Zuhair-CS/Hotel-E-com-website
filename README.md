@@ -12,7 +12,7 @@ Live Site: [https://wanderlust-j3s6.onrender.com/](https://wanderlust-j3s6.onren
 
 - User authentication (register/login/logout)
 - Create, edit, and delete travel destinations
-- Upload multiple images per destination using Cloudinary
+- Upload images using Cloudinary
 - Leave reviews on destinations
 - Flash messages for success and error states
 - Full form validation on both client and server
