@@ -48,20 +48,7 @@ Live Site: [https://wanderlust-j3s6.onrender.com/](https://wanderlust-j3s6.onren
 
 ---
 
-## 📁 Project Structure
-Wanderlust/
-├── app.js # Main app file
-├── routes/ # Express route handlers
-├── controllers/ # Route logic
-├── models/ # Mongoose schemas
-├── views/ # EJS frontend templates
-├── public/ # Static assets (CSS, JS, etc.)
-├── uploads/ # Local upload (if any)
-├── cloudConfig.js # Cloudinary config
-├── schema.js # Joi validation schemas
-└── init/ # MongoDB connection
-
-**Steps to run application locally**
+## Steps to run application locally
 
 -Install dependencies using npm install
 
